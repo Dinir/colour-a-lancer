@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Jet Lancer Player Sprite Repainter</title>
+  
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <meta name="theme-color" content="#65849f">
+  
+  <meta property="og:title" content="Jet Lancer Player Sprite Repainter">
+  <meta property="og:site_name" content="GitHub">
+  <meta name="twitter:site"     content="@github">
+  <meta name="author" content="Dinir Nertan">
+  <meta name="twitter:creator" content="@DinirNertan">
+  <meta name="description" content="Recolour the player sprite of Jet Lancer with your choice.">
+  <meta property="og:description" content="Recolour the player sprite of Jet Lancer with your choice.">
+  <link rel="canonical"      href="https://dinir.github.io/jet-lancer-repainter/">
+  <meta property="og:url" content="https://dinir.github.io/jet-lancer-repainter/">
+  <meta property="og:type" content="website">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/picker.css">
+  
+  <script src="./js/picker.js"></script>
+  <script src="./js/drawer.js"></script>
+  <script src="./js/mouse_listener.js"></script>
+</head>
+
+<body>
+<header>
+  <h1>Jet Lancer Player Sprite Repainter</h1>
+  <div>
+    <b>Colour a Lancer-01</b>
+    then save the sprite in <code>%localappdata%\JetLancer</code>:
+    type this address on your file explorer and it will open the folder for you.
+  </div>
+</header>
+<div id="container" data-nosnippet>
+  <div id="colour-picker">
+    <div id="text-input">
+      <input id="osPicker" type="color">
+      <label>
+        <span>RGB</span>
+        <input id="rgbString" type="text" minlength="6" maxlength="7">
+      </label>
+    </div>
+    <div id="sliders">
+      <label>
+        <span>H</span>
+        <input class="slider" id="hue" type="range" min="0" max="255" step="1">
+        <input class="value-text" type="number" min="0" max="255">
+      </label>
+      <label>
+        <span>S</span>
+        <input class="slider" id="saturation" type="range" min="0" max="255" step="1">
+        <input class="value-text" type="number" min="0" max="255">
+      </label>
+      <label>
+        <span>V</span>
+        <input class="slider" id="value" type="range" min="0" max="255" step="1">
+        <input class="value-text" type="number" min="0" max="255">
+      </label>
+    </div>
+  </div>
+  <div id="preview">
+    <div id="big-moving-picture">
+      <canvas width="256" height="256"></canvas>
+    </div>
+    <div id="raw-strip">
+      <canvas width="256" height="32"></canvas>
+    </div>
+  </div>
+</div>
+<footer data-nosnippet>
+  <div>Made by <a href="https://github.com/dinir" target="_blank">Dinir Nertan</a> with ♥ for <a href="http://jetlancergame.com/" target="_blank">Jet Lancer</a>.</div>
+  <address>
+    <a href="https://github.com/dinir/jet-lancer-repainter" target="_blank">GitHub Repository</a>
+  </address>
+</footer>
+</body>
+
+<script>
+  const picker = {
+    dom: document.getElementById('colour-picker')
+  }
+  picker.input = {
+    os: document.getElementById('osPicker'),
+    rgb: document.getElementById('rgbString'),
+    hue: document.getElementById('hue'),
+    hueText: this.hue.nextElementSibling,
+    saturation: document.getElementById('saturation'),
+    saturationText: this.saturation.nextElementSibling,
+    value: document.getElementById('value'),
+    valueText: this.value.nextElementSibling
+  }
+  const canvas = {
+    big: document.querySelector('#big-moving-picture canvas'),
+    strip: document.querySelector('#raw-strip canvas')
+  }
+</script>
+
+</html>

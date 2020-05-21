@@ -1,0 +1,56 @@
+html, body {
+  height: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column; }
+  body > header, body > div {
+    flex: 1 0 auto; }
+  body .footer {
+    flex-shrink: 0; }
+
+html {
+  margin: 0; }
+
+body {
+  margin: 0 1em; }
+
+body {
+  background: url("./../image/Jet-Lancer_Discord-Invite-Screen.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+  @media (orientation: portrait) {
+    body {
+      background-position-x: 86%; } }
+
+body {
+  font-family: sans-serif;
+  font-size: 16px; }
+
+a:link, a:hover, a:visited {
+  color: inherit; }
+
+h1 {
+  color: white;
+  text-align: center; }
+
+header div:last-child {
+  margin-bottom: 1.34em; }
+
+footer {
+  font-size: 0.8em;
+  margin: 2rem 0 0.5rem;
+  text-align: center; }
+  footer address {
+    font-size: 0.8em; }
+
+#container {
+  margin: auto;
+  text-align: center; }
+  #container > div {
+    display: inline-block;
+    vertical-align: middle; }
+
+/*# sourceMappingURL=main.css.map */

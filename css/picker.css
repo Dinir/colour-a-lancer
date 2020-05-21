@@ -1,0 +1,28 @@
+#colour-picker span {
+  font-family: monospace;
+  display: inline-block; }
+
+#colour-picker #text-input {
+  display: flex;
+  justify-content: space-between;
+  height: 2em;
+  align-items: center; }
+  #colour-picker #text-input input[type="color"] {
+    width: 3rem;
+    height: 1.2rem;
+    vertical-align: middle; }
+  #colour-picker #text-input input[type="text"] {
+    width: 5em;
+    height: 1rem; }
+
+#colour-picker #sliders label {
+  display: block; }
+  #colour-picker #sliders label input.slider {
+    vertical-align: middle; }
+    #colour-picker #sliders label input.slider span, #colour-picker #sliders label input.slider {
+      height: 2rem; }
+  #colour-picker #sliders label input.value-text {
+    width: 3em;
+    height: 1rem; }
+
+/*# sourceMappingURL=picker.css.map */

@@ -1,0 +1,39 @@
+$text-input-height: 1rem;
+
+#colour-picker {
+  span {
+    font-family: monospace;
+    display: inline-block;
+  }
+  
+  #text-input {
+    display: flex;
+    justify-content: space-between;
+    height: 2em;
+    align-items: center;
+    input[type="color"] {
+      width: 3rem;
+      height: 1.2 * $text-input-height;
+      vertical-align: middle;
+    }
+    input[type="text"] {
+      width: 5em;
+      height: $text-input-height;
+    }
+  }
+  #sliders {
+    label {
+      display: block;
+      input.slider {
+        span, & {
+          height: 2rem;
+        }
+        vertical-align: middle;
+      }
+      input.value-text {
+        width: 3em;
+        height: $text-input-height;
+      }
+    }
+  }
+}
