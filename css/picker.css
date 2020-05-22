@@ -9,27 +9,29 @@
   border-color: #0063db;
   padding: 0 0.5em; }
 
-#colour-picker label {
-  display: block;
-  margin: 0 0 12px; }
-
-#colour-picker span {
-  font-family: monospace;
-  display: inline-block;
-  text-align: right;
-  width: 2em; }
-
-#colour-picker #text-input {
-  text-align: right;
-  height: 32px;
-  margin: 0 0 12px; }
-
-#colour-picker #slider-container, #colour-picker #slider-text-display {
-  display: inline-block;
-  vertical-align: top; }
-
-#colour-picker #slider-text-display input {
-  display: inline-block;
-  text-align: right; }
+#colour-picker {
+  margin-right: 1em; }
+  @media (max-width: 960px) {
+    #colour-picker {
+      margin-right: 0;
+      margin-bottom: 1em; } }
+  #colour-picker label {
+    display: block;
+    margin: 0 0 12px; }
+  #colour-picker span {
+    font-family: monospace;
+    display: inline-block;
+    text-align: right;
+    width: 2em; }
+  #colour-picker #text-input {
+    text-align: right;
+    height: 32px;
+    margin: 0 0 12px; }
+  #colour-picker #slider-container, #colour-picker #slider-text-display {
+    display: inline-block;
+    vertical-align: top; }
+  #colour-picker #slider-text-display input {
+    display: inline-block;
+    text-align: right; }
 
 /*# sourceMappingURL=picker.css.map */

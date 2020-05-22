@@ -14,6 +14,13 @@ $border-color: #0063db;
 }
 
 #colour-picker {
+  margin-right: 1em;
+  @media (max-width: 960px) {
+    & {
+      margin-right: 0;
+      margin-bottom: 1em;
+    }
+  }
   label {
     display: block;
     margin: 0 0 $slider-margin;
