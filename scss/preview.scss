@@ -1,0 +1,16 @@
+#preview {
+  canvas {
+    background-color: rgba(15, 15, 15, 0.5);
+    padding: 4px;
+    border-radius: 4px;
+  }
+  #big-moving-picture {
+    canvas {
+      image-rendering: pixelated;
+      padding: 64+4px 128+4px;
+    }
+  }
+  #raw-strip {
+  
+  }
+}

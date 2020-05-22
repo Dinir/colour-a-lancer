@@ -23,11 +23,12 @@
   
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/picker.css">
+  <link rel="stylesheet" href="./css/preview.css">
   
-  <script src="./js/drawer.js"></script>
-  <script src="./js/mouse_listener.js"></script>
   <script src="./js/iro.min.js"></script>
-  
+  <script src="./js/ColourChanger.js"></script>
+  <script src="./js/mouse_listener.js"></script>
+
 </head>
 
 <body>
@@ -73,10 +74,10 @@
   </div>
   <div id="preview">
     <div id="big-moving-picture">
-      <canvas width="256" height="256"></canvas>
+      <canvas class="pixelated-on-zoomed-view" width="256" height="256"></canvas>
     </div>
     <div id="raw-strip">
-      <canvas width="256" height="32"></canvas>
+      <canvas class="pixelated-on-zoomed-view" width="512" height="32"></canvas>
     </div>
   </div>
 </div>
@@ -91,12 +92,17 @@
 <script>
   const sliderWidth = 256
   const sliderMargin = 12
+  const accentColours = [
+    'e9345c', 'b6334c', '7b3238', '922532', // top-side, bottom-side: wing and front
+    'ff90a9', '7b1c33', // end of wing, bottom-side front
+    '852a39', '5c2126', '5d2126' // bottom-side: center and darker wing
+  ]
   const picker = new iro.ColorPicker('#slider-container', {
     id: 'sliders',
     width: sliderWidth,
     margin: sliderMargin,
     display: 'inline-block',
-    color: "#e9345c",
+    color: accentColours[0],
     borderWidth: 2,
     borderColor: "#0063db",
     layout: [
@@ -131,6 +137,19 @@
   const canvas = {
     big: document.querySelector('#big-moving-picture canvas'),
     strip: document.querySelector('#raw-strip canvas')
+  }
+</script>
+
+<script>
+  const changer = {
+    big: new ColourChanger(canvas.big, 'image/player_custom.png', {
+      colours: accentColours,
+      zoom: 8,
+      cellView: true
+    }),
+    strip: new ColourChanger(canvas.strip, 'image/player_custom.png', {
+      colours: accentColours
+    })
   }
 </script>
 
