@@ -1,0 +1,10 @@
+#preview canvas {
+  background-color: rgba(15, 15, 15, 0.5);
+  padding: 4px;
+  border-radius: 4px; }
+
+#preview #big-moving-picture canvas {
+  image-rendering: pixelated;
+  padding: 68px 132px; }
+
+/*# sourceMappingURL=preview.css.map */

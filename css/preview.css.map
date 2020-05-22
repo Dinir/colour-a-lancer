@@ -1,0 +1,9 @@
+{
+	"version": 3,
+	"file": "preview.css",
+	"sources": [
+		"../scss/preview.scss"
+	],
+	"names": [],
+	"mappings": "AAAA,AACE,QADM,CACN,MAAM,CAAC;EACL,gBAAgB,EAAE,qBAAqB;EACvC,OAAO,EAAE,GAAG;EACZ,aAAa,EAAE,GAAG,GACnB;;AALH,AAOI,QAPI,CAMN,mBAAmB,CACjB,MAAM,CAAC;EACL,eAAe,EAAE,SAAS;EAC1B,OAAO,EAAE,IAAM,CAAC,KAAO,GACxB"
+}
