@@ -1,28 +1,35 @@
+.IroSlider {
+  vertical-align: bottom; }
+
+.iro-style-text-input {
+  font-family: monospace;
+  width: 4.5em;
+  height: 28px;
+  border-radius: 28px;
+  border-color: #0063db;
+  padding: 0 0.5em; }
+
+#colour-picker label {
+  display: block;
+  margin: 0 0 12px; }
+
 #colour-picker span {
   font-family: monospace;
-  display: inline-block; }
+  display: inline-block;
+  text-align: right;
+  width: 2em; }
 
 #colour-picker #text-input {
-  display: flex;
-  justify-content: space-between;
-  height: 2em;
-  align-items: center; }
-  #colour-picker #text-input input[type="color"] {
-    width: 3rem;
-    height: 1.2rem;
-    vertical-align: middle; }
-  #colour-picker #text-input input[type="text"] {
-    width: 5em;
-    height: 1rem; }
+  text-align: right;
+  height: 32px;
+  margin: 0 0 12px; }
 
-#colour-picker #sliders label {
-  display: block; }
-  #colour-picker #sliders label input.slider {
-    vertical-align: middle; }
-    #colour-picker #sliders label input.slider span, #colour-picker #sliders label input.slider {
-      height: 2rem; }
-  #colour-picker #sliders label input.value-text {
-    width: 3em;
-    height: 1rem; }
+#colour-picker #slider-container, #colour-picker #slider-text-display {
+  display: inline-block;
+  vertical-align: top; }
+
+#colour-picker #slider-text-display input {
+  display: inline-block;
+  text-align: right; }
 
 /*# sourceMappingURL=picker.css.map */

@@ -24,12 +24,14 @@
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/picker.css">
   
-  <script src="./js/picker.js"></script>
   <script src="./js/drawer.js"></script>
   <script src="./js/mouse_listener.js"></script>
+  <script src="./js/iro.min.js"></script>
+  
 </head>
 
 <body>
+
 <header>
   <h1>Jet Lancer Player Sprite Repainter</h1>
   <div>
@@ -38,30 +40,34 @@
     type this address on your file explorer and it will open the folder for you.
   </div>
 </header>
+
 <div id="container" data-nosnippet>
   <div id="colour-picker">
     <div id="text-input">
-      <input id="osPicker" type="color">
       <label>
         <span>RGB</span>
-        <input id="rgbString" type="text" minlength="6" maxlength="7">
+        <input id="hexString" class="listenToChange iro-style-text-input"
+               type="text" minlength="6" maxlength="7" placeholder="#ffffff">
       </label>
     </div>
-    <div id="sliders">
+    <div id="slider-container">
+      <!-- div#sliders.IroColorPicker -->
+    </div>
+    <div id="slider-text-display">
       <label>
         <span>H</span>
-        <input class="slider" id="hue" type="range" min="0" max="255" step="1">
-        <input class="value-text" type="number" min="0" max="255">
+        <input id="hueString" class="listenToChange iro-style-text-input"
+               type="number" max="360" step="1" placeholder="360">
       </label>
       <label>
         <span>S</span>
-        <input class="slider" id="saturation" type="range" min="0" max="255" step="1">
-        <input class="value-text" type="number" min="0" max="255">
+        <input id="saturationString" class="listenToChange iro-style-text-input"
+               type="number" max="100" step="1" placeholder="100">
       </label>
       <label>
         <span>V</span>
-        <input class="slider" id="value" type="range" min="0" max="255" step="1">
-        <input class="value-text" type="number" min="0" max="255">
+        <input id="valueString" class="listenToChange iro-style-text-input"
+               type="number" max="100" step="1" placeholder="100">
       </label>
     </div>
   </div>
@@ -74,32 +80,107 @@
     </div>
   </div>
 </div>
+
 <footer data-nosnippet>
   <div>Made by <a href="https://github.com/dinir" target="_blank">Dinir Nertan</a> with ♥ for <a href="http://jetlancergame.com/" target="_blank">Jet Lancer</a>.</div>
   <address>
     <a href="https://github.com/dinir/jet-lancer-repainter" target="_blank">GitHub Repository</a>
   </address>
 </footer>
-</body>
 
 <script>
-  const picker = {
-    dom: document.getElementById('colour-picker')
-  }
-  picker.input = {
-    os: document.getElementById('osPicker'),
-    rgb: document.getElementById('rgbString'),
-    hue: document.getElementById('hue'),
-    hueText: this.hue.nextElementSibling,
-    saturation: document.getElementById('saturation'),
-    saturationText: this.saturation.nextElementSibling,
-    value: document.getElementById('value'),
-    valueText: this.value.nextElementSibling
+  const sliderWidth = 256
+  const sliderMargin = 12
+  const picker = new iro.ColorPicker('#slider-container', {
+    id: 'sliders',
+    width: sliderWidth,
+    margin: sliderMargin,
+    display: 'inline-block',
+    color: "#e9345c",
+    borderWidth: 2,
+    borderColor: "#0063db",
+    layout: [
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: 'hue'
+        }
+      },
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: 'saturation'
+        }
+      },
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: 'value'
+        }
+      }
+    ]
+  })
+  const hexStringInput = document.getElementById('hexString')
+  const textInput = {
+    base: {},
+    hex: document.getElementById('hexString'),
+    hue: document.getElementById('hueString'),
+    saturation: document.getElementById('saturationString'),
+    value: document.getElementById('valueString'),
   }
   const canvas = {
     big: document.querySelector('#big-moving-picture canvas'),
     strip: document.querySelector('#raw-strip canvas')
   }
 </script>
+
+<script>
+  // text input value -> picker
+  const textInputCommonParent = document.getElementById('colour-picker')
+  textInputCommonParent.addEventListener('change', function (e) {
+    if(
+      e.target.tagName !== 'INPUT' ||
+      !e.target.classList.contains('listenToChange')
+    ) {
+      return
+    }
+    
+    switch (e.target.id) {
+      case 'hexString':
+        // send the value to the picker
+        picker.color.hexString = e.target.value || '#000000'
+        break
+      case 'hueString':
+      case 'saturationString':
+      case 'valueString':
+        // keep the values valid
+        textInput.hue.value = Math.min(textInput.hue.value, 360) || 0
+        textInput.saturation.value = Math.min(textInput.saturation.value, 100) || 0
+        textInput.value.value = Math.min(textInput.value.value, 100) || 0
+        
+        // send the values to the picker
+        picker.color.hsv = {
+          h: textInput.hue.value,
+          s: textInput.saturation.value,
+          v: textInput.value.value
+        }
+        break
+    }
+  })
+  
+  // picker -> text input value & canvas
+  picker.on(['color:init', 'color:change'], function(color) {
+    // update text displays
+    textInput.hex.value = color.hexString
+    textInput.hue.value = Math.round(color.hsv.h)
+    textInput.saturation.value = Math.round(color.hsv.s)
+    textInput.value.value = Math.round(color.hsv.v)
+    
+    // todo: call something that updates the canvas here
+    console.log(color.hsv)
+  })
+</script>
+
+</body>
 
 </html>

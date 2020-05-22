@@ -1,39 +1,44 @@
+@import 'iro-color-picker';
+
 $text-input-height: 1rem;
+$text-input-border-width: 2px;
+$border-color: #0063db;
+
+.iro-style-text-input {
+  font-family: monospace;
+  width: 4.5em;
+  height: $slider-height - 2 * $text-input-border-width;
+  border-radius: $slider-height - 2 * $text-input-border-width;
+  border-color: $border-color;
+  padding: 0 0.5em;
+}
 
 #colour-picker {
+  label {
+    display: block;
+    margin: 0 0 $slider-margin;
+  }
   span {
     font-family: monospace;
     display: inline-block;
+    text-align: right;
+    width: 2em;
   }
   
   #text-input {
-    display: flex;
-    justify-content: space-between;
-    height: 2em;
-    align-items: center;
-    input[type="color"] {
-      width: 3rem;
-      height: 1.2 * $text-input-height;
-      vertical-align: middle;
-    }
-    input[type="text"] {
-      width: 5em;
-      height: $text-input-height;
-    }
+    text-align: right;
+    height: $slider-height;
+    margin: 0 0 $slider-margin;
   }
-  #sliders {
-    label {
-      display: block;
-      input.slider {
-        span, & {
-          height: 2rem;
-        }
-        vertical-align: middle;
-      }
-      input.value-text {
-        width: 3em;
-        height: $text-input-height;
-      }
+  #slider-container, #slider-text-display {
+    // ensure these two are vertically aligned in the same parent
+    display: inline-block;
+    vertical-align: top;
+  }
+  #slider-text-display {
+    input {
+      display: inline-block;
+      text-align: right;
     }
   }
 }
