@@ -21,7 +21,7 @@ class ColourChanger {
     this.ctx = canvas.getContext('2d')
     this.image = new Image()
     this.image.src = imageUrl
-    this.colours = colours
+    this.colours = colours.map(ColourChanger.hexToHSV)
     this.zoom = zoom
     this.cellView = cellView
     this.cellSize = cellSize
@@ -29,6 +29,77 @@ class ColourChanger {
     this.imageData = []
     
     this.image.addEventListener('load', this.processImage.bind(this))
+  }
+  
+  static hexToRGBA (hex) {
+    if (typeof hex !== 'string') { return [0, 0, 0, 255] }
+  
+    const string = hex.replace('#','').replace(/[^0-9a-f]/g, '0')
+    let formattedString = ''
+  
+    switch (string.length) {
+      case 3:
+        for (let i = 0; i < 3; i++) { formattedString += string[i].repeat(2) }
+        formattedString += 'ff'
+        break
+      case 6:
+        formattedString = string + 'ff'
+        break
+      case 8:
+        formattedString = string
+        break
+      default:
+        formattedString = '000000ff'
+        break
+    }
+  
+    const values = [0, 0, 0, 255]
+    for (let i = 0; i < 4; i++) {
+      values[i] =
+        parseInt(formattedString.slice( i * 2, ( i + 1 ) * 2 ), 16) || values[i]
+    }
+  
+    return values
+  }
+  /**
+   * Convert RGB (0-255 each) to HSV (0-360, 0-100, 0-100)
+   * @param {number[]} rgb array containing value of each color
+   * @returns {number[]} array containing hue, saturation, and value
+   *
+   * @link https://en.wikipedia.org/wiki/HSL_and_HSV#From_RGB
+   * @link http://kourbatov.com/faq/rgb2hsv.htm
+   */
+  static RGBToHSV (rgb) {
+    // convert value range from [0-255] to [0-1]
+    const [R,G,B] = rgb.map(v => v / 255)
+    // maximum component (value)
+    const Xmax = Math.max(R,G,B), V = Xmax
+    // minimum component
+    const Xmin = Math.min(R,G,B)
+    // range (chroma)
+    const C = Xmax - Xmin
+    // non-chromatic
+    if (C === 0) { return [0, 0, V] }
+  
+    // mid-range (lightness)
+    const L = V - C / 2
+    // common hue
+    let H = 60
+    switch (V) {
+      case R: H *= (G-B)/C; break
+      case G: H *= 2 + (B-R)/C; break
+      case B: H *= 4 + (R-G)/C; break
+    }
+    if (H < 0) { H += 360 }
+    if (H > 360) { H %= 360 }
+    // saturation
+    const S = C / V
+  
+    // convert range from [0-360, 0-1, 0-1] to [0-360, 0-100, 0-100] rounded
+    return [H, 100 * S, 100 * V].map(Math.round)
+  }
+  static hexToHSV (hex) {
+    return ColourChanger.RGBToHSV(ColourChanger.hexToRGBA(hex))
   }
   
   processImage () {
