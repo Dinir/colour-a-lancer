@@ -151,6 +151,10 @@
       colours: accentColours
     })
   }
+  // load `changer.big.imageData` with imageData of all sprite cells
+  changer.strip.image.addEventListener('load', () => {
+    changer.big.imageData = changer.strip.imageData
+  })
 </script>
 
 <script>
