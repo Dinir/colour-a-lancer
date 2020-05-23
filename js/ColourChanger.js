@@ -7,6 +7,7 @@ class ColourChanger {
    * @param {number} [zoom=1]
    * @param {boolean} [cellView=false]
    * @param {number[]} [cellSize=[32,32]]
+   * @param {number} [cellNumber=0]
    */
   constructor (
     canvas,
@@ -14,7 +15,8 @@ class ColourChanger {
       colours = [],
       zoom = 1,
       cellView = false,
-      cellSize = [32, 32]
+      cellSize = [32, 32],
+      cellNumber = 0
   }) {
     this.ctx = canvas.getContext('2d')
     this.image = new Image()
@@ -23,7 +25,7 @@ class ColourChanger {
     this.zoom = zoom
     this.cellView = cellView
     this.cellSize = cellSize
-    this.cellNumber = 0
+    this.cellNumber = cellNumber
     this.imageData = []
     
     this.image.addEventListener('load', this.processImage.bind(this))
