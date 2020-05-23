@@ -120,8 +120,13 @@ class ColourChanger {
     cellNumber = this.cellNumber, imageData = this.imageData, zoom = this.zoom, canvasX = 0
   ) {
     const cellImageData = imageData[cellNumber] || imageData[0]
+    if (!this.image.complete) {
+      // image is not yet loaded
+      return
+    }
     if (!imageData[cellNumber]) {
       console.error('tried locating unexisting imageData')
+      return
     }
     if (zoom <= 1) {
       this.ctx.putImageData(cellImageData, canvasX, 0)

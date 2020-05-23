@@ -204,6 +204,29 @@
   })
 </script>
 
+<script>
+  const canvasBigPadding = [132, 68]
+  canvas.big.addEventListener('mousemove', e => {
+    const posFromCanvasStart = [
+      Math.max( e.layerX - canvasBigPadding[0] , 0 ),
+      Math.max( e.layerY - canvasBigPadding[1] , 0 )
+    ]
+    
+    let yQuantizedPos =
+      Math.min( Math.floor( posFromCanvasStart[1] / 16 ) , 16 ) % 16
+    yQuantizedPos = ( yQuantizedPos + 12 ) % 16
+    
+    if (changer.big.cellNumber !== yQuantizedPos) {
+      changer.big.cellNumber = yQuantizedPos
+      changer.big.drawOneCell()
+    }
+  })
+  canvas.big.addEventListener('mouseleave', () => {
+    changer.big.cellNumber = 4
+    changer.big.drawOneCell()
+  })
+</script>
+
 </body>
 
 </html>
