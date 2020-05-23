@@ -1,5 +1,5 @@
-@mixin full-page-background($image) {
-  background: url($image) no-repeat center center fixed;
+@mixin full-page-background($image, $fallback-color) {
+  background: url($image) $fallback-color no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

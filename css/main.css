@@ -9,14 +9,17 @@ body {
   body .footer {
     flex-shrink: 0; }
 
-html {
+html, body {
   margin: 0; }
 
 body {
-  margin: 0 1em; }
+  padding: 0 1em; }
+
+html {
+  min-width: 552px; }
 
 body {
-  background: url("./../image/Jet-Lancer_Discord-Invite-Screen.png") no-repeat center center fixed;
+  background: url("./../image/Jet-Lancer_Discord-Invite-Screen.png") #0063db no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

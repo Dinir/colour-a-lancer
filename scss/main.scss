@@ -1,12 +1,17 @@
 @import 'full-page-background', 'bottom-footer';
 
 // remove page margin
-html { margin: 0; }
-body { margin: 0 1em; }
+html, body { margin: 0; }
+body { padding: 0 1em; }
+
+// align page in small window
+html {
+  min-width: 552px;
+}
 
 // background
 body {
-  @include full-page-background("./../image/Jet-Lancer_Discord-Invite-Screen.png");
+  @include full-page-background("./../image/Jet-Lancer_Discord-Invite-Screen.png", #0063db);
   
   @media (orientation: portrait) {
     & {
