@@ -97,6 +97,13 @@
     'ff90a9', '7b1c33', // end of wing, bottom-side front
     '852a39', '5c2126', '5d2126' // bottom-side: center and darker wing
   ]
+  const spriteIndex = {
+    topView: 4,
+    bottomView: 12
+  }
+</script>
+
+<script>
   const picker = new iro.ColorPicker('#slider-container', {
     id: 'sliders',
     width: sliderWidth,
@@ -126,7 +133,6 @@
       }
     ]
   })
-  const hexStringInput = document.getElementById('hexString')
   const textInput = {
     base: {},
     hex: document.getElementById('hexString'),
@@ -214,7 +220,7 @@
     
     let yQuantizedPos =
       Math.min( Math.floor( posFromCanvasStart[1] / 16 ) , 16 ) % 16
-    yQuantizedPos = ( yQuantizedPos + 12 ) % 16
+    yQuantizedPos = ( yQuantizedPos + spriteIndex.bottomView ) % 16
     
     if (changer.big.cellNumber !== yQuantizedPos) {
       changer.big.cellNumber = yQuantizedPos
@@ -222,7 +228,7 @@
     }
   })
   canvas.big.addEventListener('mouseleave', () => {
-    changer.big.cellNumber = 4
+    changer.big.cellNumber = spriteIndex.topView
     changer.big.drawOneCell()
   })
 </script>

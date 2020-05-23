@@ -125,7 +125,7 @@ class ColourChanger {
       return
     }
     if (!imageData[cellNumber]) {
-      console.error('tried locating unexisting imageData')
+      console.warn('tried locating unexisting imageData')
       return
     }
     if (zoom <= 1) {
