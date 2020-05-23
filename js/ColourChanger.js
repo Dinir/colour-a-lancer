@@ -24,37 +24,52 @@ class ColourChanger {
     this.cellView = cellView
     this.cellSize = cellSize
     this.cellNumber = 0
+    this.imageData = []
     
-    this.image.onload = this.drawImage.bind(this)
+    this.image.addEventListener('load', this.processImage.bind(this))
+  }
+  
+  processImage () {
+    this.drawFromImage()
+    if (!this.cellView) {
+      this.imageData = this.getImageDataFromEachCell()
+    }
   }
   
   getImageDataFromEachCell () {
     const imgWidth = this.image.width
     const cellWidth = this.cellSize[0]
     
-    const imageData = []
-    
     for (let i=0; i*cellWidth<imgWidth; i++) {
-      imageData[i] = this.getImageDataFromCell(i)
+      this.imageData[i] = this.getImageDataFromCell(i)
     }
     
-    return imageData
+    return this.imageData
   }
   getImageDataFromCell (cellNumber = this.cellNumber, cellSize = this.cellSize) {
     const cellWidth = cellSize[0]
     const cellHeight = cellSize[1]
     return this.ctx.getImageData(cellNumber * cellWidth, 0, cellWidth, cellHeight)
   }
+  importImageData (imageDataRef) {
+    for (let i = 0; i < imageDataRef.length; i++) {
+      this.imageData[i] = imageDataRef[i]
+    }
+  }
   
-  drawImage () {
+  clear () {
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+  }
+  
+  drawFromImage () {
     if (this.cellView) {
-      this.drawOneCell(this.cellNumber)
+      this.drawOneCellFromImage(this.cellNumber)
     } else {
       this.ctx.drawImage(this.image, 0, 0)
     }
   }
   
-  drawOneCell (
+  drawOneCellFromImage (
     cellNumber = this.cellNumber, zoom = this.zoom, cellSize = this.cellSize
   ) {
     const [cellWidth, cellHeight] = cellSize
@@ -75,9 +90,9 @@ class ColourChanger {
     
     // draw the cell zoomed
     this.ctx.save()
-    for (let y = 0; y < cellHeight; y++) {
-      for (let x = 0; x < cellWidth; x++) {
-        const dataIndex = ( y * cellWidth + x ) * 4
+    for (let y = 0; y < imageData.height; y++) {
+      for (let x = 0; x < imageData.width; x++) {
+        const dataIndex = ( y * imageData.width + x ) * 4
         this.ctx.fillStyle =
           'rgba(' +
           imageData.data[dataIndex] + ',' +
@@ -89,5 +104,46 @@ class ColourChanger {
       }
     }
     this.ctx.restore()    
+  }
+  
+  drawEachCell (
+    imageData = this.imageData, zoom = this.zoom
+  ) {
+    this.clear()
+    let x = 0
+    for (let i = 0; i < imageData.length; i++) {
+      this.drawOneCell(i, imageData, zoom, x)
+      x += imageData[i].width * zoom
+    }
+  }
+  drawOneCell (
+    cellNumber = this.cellNumber, imageData = this.imageData, zoom = this.zoom, canvasX = 0
+  ) {
+    const cellImageData = imageData[cellNumber] || imageData[0]
+    if (!imageData[cellNumber]) {
+      console.error('tried locating unexisting imageData')
+    }
+    if (zoom <= 1) {
+      this.ctx.putImageData(cellImageData, canvasX, 0)
+    } else {
+      this.ctx.clearRect(
+        canvasX, 0, cellImageData.width * zoom, cellImageData.height * zoom
+      )
+      this.ctx.save()
+      for (let y = 0; y < cellImageData.height; y++) {
+        for (let x = 0; x < cellImageData.width; x++) {
+          const dataIndex = ( y * cellImageData.width + x ) * 4
+          this.ctx.fillStyle =
+            'rgba(' +
+            cellImageData.data[dataIndex] + ',' +
+            cellImageData.data[dataIndex+1] + ',' +
+            cellImageData.data[dataIndex+2] + ',' +
+            cellImageData.data[dataIndex+3] +
+            ')'
+          this.ctx.fillRect(canvasX + x * zoom, y * zoom, zoom, zoom)
+        }
+      }
+      this.ctx.restore()
+    }
   }
 }
