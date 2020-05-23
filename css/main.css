@@ -44,7 +44,8 @@ header div:last-child {
 
 footer {
   font-size: 0.8em;
-  margin: 2rem 0 0.5rem;
+  margin: 2rem 0 0;
+  padding-bottom: 1rem;
   text-align: center; }
   footer address {
     font-size: 0.8em; }
