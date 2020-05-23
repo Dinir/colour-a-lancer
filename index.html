@@ -215,8 +215,8 @@
   const canvasBigPadding = [132, 68]
   canvas.big.addEventListener('mousemove', e => {
     const posFromCanvasStart = [
-      Math.max( e.layerX - canvasBigPadding[0] , 0 ),
-      Math.max( e.layerY - canvasBigPadding[1] , 0 )
+      Math.max( e.offsetX - canvasBigPadding[0] , 0 ),
+      Math.max( e.offsetY - canvasBigPadding[1] , 0 )
     ]
     
     let yQuantizedPos =
