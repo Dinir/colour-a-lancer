@@ -61,6 +61,9 @@ class ColourChanger {
   
     return values
   }
+  static RGBAToHex (rgba) {
+    return '#' + rgba.map(v => v.toString(16)).join('')
+  }
   /**
    * Convert RGB (0-255 each) to HSV (0-360, 0-100, 0-100)
    * @param {number[]} rgb array containing value of each color
@@ -98,8 +101,45 @@ class ColourChanger {
     // convert range from [0-360, 0-1, 0-1] to [0-360, 0-100, 0-100] rounded
     return [H, 100 * S, 100 * V].map(Math.round)
   }
+  /**
+   * Convert HSV (0-360, 0-100, 0-100) to RGB (0-255 each)
+   * @param {number[]} hsv array containing hue, saturation, and value
+   * @returns {number[]} array containing value of each color
+   *
+   * @link https://en.wikipedia.org/wiki/HSL_and_HSV#HSV_to_RGB
+   * @link https://www.desmos.com/calculator/jhx7p5idov
+   */
+  static HSVToRGB (hsv) {
+    // convert value range of saturation and value
+    // from [0-100] to [0-1]
+    const H = hsv[0]
+    const S = hsv[1] / 100
+    const V = hsv[2] / 100
+    // chroma
+    const C = V * S
+    // intermediate values for the second largest component of the color
+    const Hquantized = H / 60
+    const X = C * ( 1 - Math.abs( Hquantized % 2 - 1 ) )
+    let R = 0, G = 0, B = 0
+    // set base rgb value
+    if (Hquantized >= 0 && Hquantized <= 2) {
+      if (Hquantized <= 1) { R = C; G = X } else { R = X; G = C }
+    } else if (Hquantized > 2 && Hquantized <= 4) {
+      if (Hquantized <= 3) { G = C; B = X } else { G = X; B = C }
+    } else if (Hquantized > 4 && Hquantized <= 6) {
+      if (Hquantized <= 5) { B = C; R = X } else { B = X; R = C }
+    }
+    // value matching variable
+    const m = V - C;
+  
+    // convert range from [0-1] to [0-255]
+    return [R,G,B].map(v => Math.round( 255 * (v + m) ))
+  }
   static hexToHSV (hex) {
     return ColourChanger.RGBToHSV(ColourChanger.hexToRGBA(hex))
+  }
+  static HSVToHex (hsv) {
+    return ColourChanger.RGBAToHex(ColourChanger.HSVToRGB(hsv))
   }
   
   processImage () {
