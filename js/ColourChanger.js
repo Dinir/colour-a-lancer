@@ -344,7 +344,9 @@ class ColourChanger {
     }
   
     for (let i = 0; i < imageDataCell.data.length; i += 4) {
-      // if ( cellNumber === 3 && i === ( 16 * 32 + 13 ) * 4 ) debugger
+      // don't process for transparent pixel
+      if (imageDataCell.data[i + 3] === 0) { continue }
+      
       [
         imageDataCell.data[i],
         imageDataCell.data[i + 1],
@@ -402,6 +404,10 @@ class ColourChanger {
       for (let y = 0; y < cellImageData.height; y++) {
         for (let x = 0; x < cellImageData.width; x++) {
           const dataIndex = ( y * cellImageData.width + x ) * 4
+          
+          // don't draw if the pixel is transparent
+          if (cellImageData.data[dataIndex+3] === 0) { continue }
+          
           this.ctx.fillStyle =
             'rgba(' +
             cellImageData.data[dataIndex] + ',' +
