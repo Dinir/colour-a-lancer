@@ -27,7 +27,6 @@
   
   <script src="./js/iro.min.js"></script>
   <script src="./js/ColourChanger.js"></script>
-  <script src="./js/mouse_listener.js"></script>
 
 </head>
 
@@ -89,6 +88,7 @@
   </address>
 </footer>
 
+<!-- define common values -->
 <script>
   const sliderWidth = 256
   const sliderMargin = 12
@@ -104,6 +104,22 @@
   }
 </script>
 
+<!-- define dom references -->
+<script>
+  const textInput = {
+    base: {},
+    hex: document.getElementById('hexString'),
+    hue: document.getElementById('hueString'),
+    saturation: document.getElementById('saturationString'),
+    value: document.getElementById('valueString'),
+  }
+  const canvas = {
+    big: document.querySelector('#big-moving-picture canvas'),
+    strip: document.querySelector('#raw-strip canvas')
+  }
+</script>
+
+<!-- create instances -->
 <script>
   const picker = new iro.ColorPicker('#slider-container', {
     id: 'sliders',
@@ -134,20 +150,6 @@
       }
     ]
   })
-  const textInput = {
-    base: {},
-    hex: document.getElementById('hexString'),
-    hue: document.getElementById('hueString'),
-    saturation: document.getElementById('saturationString'),
-    value: document.getElementById('valueString'),
-  }
-  const canvas = {
-    big: document.querySelector('#big-moving-picture canvas'),
-    strip: document.querySelector('#raw-strip canvas')
-  }
-</script>
-
-<script>
   const changer = {
     big: new ColourChanger(canvas.big, 'image/player_custom.png', {
       colours: accentColours,
@@ -165,6 +167,7 @@
   })
 </script>
 
+<!-- connect text input elements and the picker -->
 <script>
   // text input value -> picker
   const textInputCommonParent = document.getElementById('colour-picker')
@@ -216,6 +219,7 @@
   })
 </script>
 
+<!-- add mouse events -->
 <script>
   const canvasBigPadding = [132, 68]
   canvas.big.addEventListener('mousemove', e => {

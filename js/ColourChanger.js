@@ -359,8 +359,7 @@ class ColourChanger {
         ]
       )
     }
-    // console.log(this.convertedColours[0])
-    // console.log('getConvertedImageDataCell', imageDataCell.data[960], imageDataCell.data[961], imageDataCell.data[962])
+    
     return imageDataCell
   }
   
