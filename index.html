@@ -95,7 +95,8 @@
   const accentColours = [
     'e9345c', 'b6334c', '7b3238', '922532', // top-side, bottom-side: wing and front
     'ff90a9', '7b1c33', // end of wing, bottom-side front
-    '852a39', '5c2126', '5d2126' // bottom-side: center and darker wing
+    '852a39', '5c2126', '5d2126', // bottom-side: center and darker wing
+    'b6334d', 'b7334c' // WHY IS CANVAS CHANGING 1 BIT OF RGB VALUE ON SOME PIXELS WHEN DRAWING IT STRAIGHT FROM THE STORED IMAGE FILE
   ]
   const spriteIndex = {
     topView: 4,
@@ -206,8 +207,12 @@
     textInput.saturation.value = Math.round(color.hsv.s)
     textInput.value.value = Math.round(color.hsv.v)
     
-    // todo: call something that updates the canvas here
-    console.log(color.hsv)
+    // apply the new colour and draw the image with it
+    const hsvArray = [color.hsv.h, color.hsv.s, color.hsv.v]
+    changer.big.saveConvertedColours(hsvArray)
+    changer.strip.saveConvertedColours(hsvArray)
+    changer.big.drawOneCell()
+    changer.strip.drawEachCell()
   })
 </script>
 

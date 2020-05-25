@@ -22,6 +22,7 @@ class ColourChanger {
     this.image = new Image()
     this.image.src = imageUrl
     this.colours = colours.map(ColourChanger.hexToHSV)
+    this.lastUsedConversionColor = [0, 0, 0]
     this.zoom = zoom
     this.cellView = cellView
     this.cellSize = cellSize
@@ -142,38 +143,32 @@ class ColourChanger {
     return ColourChanger.RGBAToHex(ColourChanger.HSVToRGB(hsv))
   }
   
+  static getPixelData (x, y, imageData) {
+    if (!imageData) {return false}
+    const width = imageData.width
+    const index = ( y * width + x ) * 4
+    
+    return [
+      imageData.data[index],
+      imageData.data[index+1],
+      imageData.data[index+2],
+      imageData.data[index+3],
+      ColourChanger.RGBAToHex([
+        imageData.data[index],
+        imageData.data[index+1],
+        imageData.data[index+2]
+      ])
+    ]
+  }
+  
+  // methods to make things from an image
+  
   processImage () {
     this.drawFromImage()
     if (!this.cellView) {
       this.imageData = this.getImageDataFromEachCell()
     }
   }
-  
-  getImageDataFromEachCell () {
-    const imgWidth = this.image.width
-    const cellWidth = this.cellSize[0]
-    
-    for (let i=0; i*cellWidth<imgWidth; i++) {
-      this.imageData[i] = this.getImageDataFromCell(i)
-    }
-    
-    return this.imageData
-  }
-  getImageDataFromCell (cellNumber = this.cellNumber, cellSize = this.cellSize) {
-    const cellWidth = cellSize[0]
-    const cellHeight = cellSize[1]
-    return this.ctx.getImageData(cellNumber * cellWidth, 0, cellWidth, cellHeight)
-  }
-  importImageData (imageDataRef) {
-    for (let i = 0; i < imageDataRef.length; i++) {
-      this.imageData[i] = imageDataRef[i]
-    }
-  }
-  
-  clear () {
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
-  }
-  
   drawFromImage () {
     if (this.cellView) {
       this.drawOneCellFromImage(this.cellNumber)
@@ -181,7 +176,6 @@ class ColourChanger {
       this.ctx.drawImage(this.image, 0, 0)
     }
   }
-  
   drawOneCellFromImage (
     cellNumber = this.cellNumber, zoom = this.zoom, cellSize = this.cellSize
   ) {
@@ -216,29 +210,186 @@ class ColourChanger {
         this.ctx.fillRect(x * zoom, y * zoom, zoom, zoom)
       }
     }
-    this.ctx.restore()    
+    this.ctx.restore()
+  }
+  getImageDataFromEachCell () {
+    const imgWidth = this.image.width
+    const cellWidth = this.cellSize[0]
+    const imageData = []
+    
+    for (let i=0; i*cellWidth<imgWidth; i++) {
+      imageData[i] = this.getImageDataFromCell(i)
+    }
+    
+    return imageData
+  }
+  getImageDataFromCell (cellNumber = this.cellNumber, cellSize = this.cellSize) {
+    const cellWidth = cellSize[0]
+    const cellHeight = cellSize[1]
+    return this.ctx.getImageData(cellNumber * cellWidth, 0, cellWidth, cellHeight)
   }
   
+  // methods to prepare resource for colour conversion
+  
+  saveConvertedColours (
+    hsv, originalColours = this.colours, mainColour = this.colours[0]
+  ) {
+    // copy the colours
+    const colours = Array(originalColours.length)
+    for (let i = 0; i < originalColours.length; i++) {
+      colours[i] = Array.from(originalColours[i])
+    }
+    // define main colour
+    const main = { h: mainColour[0], s: mainColour[1], v: mainColour[2] }
+    // define difference
+    const difference = {
+      h: hsv[0] - main.h,
+      s: hsv[1] / main.s,
+      v: hsv[2] / main.v
+    }
+    // apply difference to every colours
+    for (let i = 0; i < colours.length; i++) {
+      const colour = colours[i]
+      
+      colour[0] += difference.h
+      colour[1] *= difference.s
+      colour[2] *= difference.v
+      
+      // keep them in the ranges
+      for (let a = 0; a < 3; a++) {
+        if (a === 0) {
+          // hue overwraps
+          if (colour[a] < 0) { colour[a] += 360 }
+          if (colour[a] > 360) { colour[a] %= 360 }
+          continue
+        }
+        // saturation and value
+        if (colour[a] < 0) { colour[a] = 0 }
+        if (colour[a] > 100) { colour[a] = 100 }
+      }
+    }
+    
+    this.lastUsedConversionColor = hsv
+    this.convertedColours = colours
+  }
+  getConvertedColourForPixel (
+    hsv, dataInRGB,
+    originalColours = this.colours,
+    convertedColours = this.convertedColours,
+    mainColour = this.colours[0]
+  ) {
+    if (!this.isThisTheLastUsedConversionColor(hsv)) {
+      this.saveConvertedColours(hsv, originalColours, mainColour)
+      convertedColours = this.convertedColours
+    }
+    let dataInHSV = ColourChanger.RGBToHSV(dataInRGB)
+    let foundColourIndex = -1
+    
+    for (let i = 0; i < originalColours.length; i++) {
+      const originalColour = originalColours[i]
+      if (
+        dataInHSV[0] === originalColour[0] &&
+        dataInHSV[1] === originalColour[1] &&
+        dataInHSV[2] === originalColour[2]
+      ) {
+        foundColourIndex = i
+        break
+      }
+    }
+    
+    if (foundColourIndex === -1) { return dataInRGB }
+    
+    return ColourChanger.HSVToRGB(convertedColours[foundColourIndex])
+  }
+  isThisTheLastUsedConversionColor (hsv) {
+    return hsv.every((v, i) => v === this.lastUsedConversionColor[i])
+  }
+  copyImageData () {
+    // deep copy the stored imageData to make a change on
+    const imageDataCopy = []
+    for (let i = 0; i < this.imageData.length; i++) {
+      imageDataCopy[i] = this.copyImageDataOfOneCell(i)
+    }
+    return imageDataCopy
+  }
+  copyImageDataOfOneCell (cellNumber = this.cellNumber) {
+    if (!this.imageData[cellNumber]) {
+      return false
+    }
+    const cellCopy = this.ctx.createImageData(this.imageData[cellNumber])
+    cellCopy.data.set(this.imageData[cellNumber].data)
+    
+    return cellCopy
+  }
+  
+  // methods to make converted image data
+  
+  getConvertedImageData (hsv) {
+    const imageData = []
+    
+    for (let c = 0; c < imageData.length; c++) {
+      // for each cell in imageData array
+      imageData[c] = this.getConvertedImageDataCell(hsv, c)
+    }
+    
+    return imageData
+  }
+  getConvertedImageDataCell (
+    hsv,
+    cellNumber = this.cellNumber
+  ) {
+    const imageDataCell = this.copyImageDataOfOneCell(cellNumber)
+    if (!imageDataCell) {
+      return false
+    }
+  
+    for (let i = 0; i < imageDataCell.data.length; i += 4) {
+      // if ( cellNumber === 3 && i === ( 16 * 32 + 13 ) * 4 ) debugger
+      [
+        imageDataCell.data[i],
+        imageDataCell.data[i + 1],
+        imageDataCell.data[i + 2]
+      ] = this.getConvertedColourForPixel(
+        hsv, [
+          imageDataCell.data[i],
+          imageDataCell.data[i + 1],
+          imageDataCell.data[i + 2]
+        ]
+      )
+    }
+    // console.log(this.convertedColours[0])
+    // console.log('getConvertedImageDataCell', imageDataCell.data[960], imageDataCell.data[961], imageDataCell.data[962])
+    return imageDataCell
+  }
+  
+  clear () {
+    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+  }
   drawEachCell (
+    hsv = this.lastUsedConversionColor,
     imageData = this.imageData, zoom = this.zoom
   ) {
     this.clear()
     let x = 0
     for (let i = 0; i < imageData.length; i++) {
-      this.drawOneCell(i, imageData, zoom, x)
+      this.drawOneCell(hsv, i, imageData, zoom, x)
       x += imageData[i].width * zoom
     }
   }
   drawOneCell (
-    cellNumber = this.cellNumber, imageData = this.imageData, zoom = this.zoom, canvasX = 0
+    hsv = this.lastUsedConversionColor, cellNumber = this.cellNumber,
+    imageData = this.imageData, zoom = this.zoom,
+    canvasX = 0
   ) {
-    const cellImageData = imageData[cellNumber] || imageData[0]
+    const cellImageData = hsv ?
+      this.getConvertedImageDataCell(hsv, cellNumber) :
+      imageData[cellNumber] || imageData[0]
     if (!this.image.complete) {
-      // image is not yet loaded
+      console.warn('image is not yet loaded')
       return
     }
-    if (!imageData[cellNumber]) {
-      console.warn('tried locating unexisting imageData')
+    if (!cellImageData) {
+      console.warn('tried locating not existing imageData')
       return
     }
     if (zoom <= 1) {
