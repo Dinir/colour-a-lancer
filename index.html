@@ -223,13 +223,10 @@
 <script>
   const canvasBigPadding = [132, 68]
   canvas.big.addEventListener('mousemove', e => {
-    const posFromCanvasStart = [
-      Math.max( e.offsetX - canvasBigPadding[0] , 0 ),
-      Math.max( e.offsetY - canvasBigPadding[1] , 0 )
-    ]
+    const posYFromCanvasStart = Math.max( e.offsetY - canvasBigPadding[1] , 0 )
     
     let yQuantizedPos =
-      Math.min( Math.floor( posFromCanvasStart[1] / 16 ) , 16 ) % 16
+      Math.min( Math.floor( posYFromCanvasStart / 16 ) , 16 ) % 16
     yQuantizedPos = ( yQuantizedPos + spriteIndex.bottomView ) % 16
     
     if (changer.big.cellNumber !== yQuantizedPos) {
