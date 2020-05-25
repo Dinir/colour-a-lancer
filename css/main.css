@@ -39,8 +39,16 @@ h1 {
   color: white;
   text-align: center; }
 
-header div:last-child {
-  margin-bottom: 1.34em; }
+code {
+  border-radius: 0.25em;
+  background-color: rgba(15, 15, 15, 0.5);
+  padding: 0.1em 0.25em;
+  color: #cec7b0; }
+
+header {
+  text-align: center; }
+  header div:last-child {
+    margin-bottom: 1.34em; }
 
 footer {
   font-size: 0.8em;

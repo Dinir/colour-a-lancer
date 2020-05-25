@@ -1,5 +1,8 @@
 @import 'full-page-background', 'bottom-footer';
 
+$vivid-blue: #0063db;
+$light-grey-on-the-jet: #cec7b0;
+
 // remove page margin
 html, body { margin: 0; }
 body { padding: 0 1em; }
@@ -11,7 +14,7 @@ html {
 
 // background
 body {
-  @include full-page-background("./../image/Jet-Lancer_Discord-Invite-Screen.png", #0063db);
+  @include full-page-background("./../image/Jet-Lancer_Discord-Invite-Screen.png", $vivid-blue);
   
   @media (orientation: portrait) {
     & {
@@ -35,7 +38,15 @@ h1 {
   text-align: center;
 }
 
+code {
+  border-radius: 0.25em;
+  background-color: rgba(15, 15, 15, 0.5);
+  padding: 0.1em 0.25em;
+  color: $light-grey-on-the-jet;
+}
+
 header {
+  text-align: center;
   div:last-child {
     margin-bottom: 1.34em;
   }
