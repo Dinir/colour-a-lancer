@@ -211,9 +211,8 @@
     textInput.value.value = Math.round(color.hsv.v)
     
     // apply the new colour and draw the image with it
-    const hsvArray = [color.hsv.h, color.hsv.s, color.hsv.v]
-    changer.big.saveConvertedColours(hsvArray)
-    changer.strip.saveConvertedColours(hsvArray)
+    changer.big.saveConvertedColours(color.hsv.h, color.hsv.s, color.hsv.v)
+    changer.strip.saveConvertedColours(color.hsv.h, color.hsv.s, color.hsv.v)
     changer.big.drawOneCell()
     changer.strip.drawEachCell()
   })

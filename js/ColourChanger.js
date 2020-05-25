@@ -232,7 +232,7 @@ class ColourChanger {
   // methods to prepare resource for colour conversion
   
   saveConvertedColours (
-    hsv, originalColours = this.colours, mainColour = this.colours[0]
+    conversionH, conversionS, conversionV, originalColours = this.colours, mainColour = this.colours[0]
   ) {
     // copy the colours
     const colours = Array(originalColours.length)
@@ -243,9 +243,9 @@ class ColourChanger {
     const main = { h: mainColour[0], s: mainColour[1], v: mainColour[2] }
     // define difference
     const difference = {
-      h: hsv[0] - main.h,
-      s: hsv[1] / main.s,
-      v: hsv[2] / main.v
+      h: conversionH - main.h,
+      s: conversionS / main.s,
+      v: conversionV / main.v
     }
     // apply difference to every colours
     for (let i = 0; i < colours.length; i++) {
@@ -269,7 +269,7 @@ class ColourChanger {
       }
     }
     
-    this.lastUsedConversionColor = hsv
+    this.lastUsedConversionColor = [conversionH, conversionS, conversionV]
     this.convertedColours = colours
   }
   getConvertedColourForPixel (
@@ -279,7 +279,7 @@ class ColourChanger {
     mainColour = this.colours[0]
   ) {
     if (!this.isThisTheLastUsedConversionColor(hsv)) {
-      this.saveConvertedColours(hsv, originalColours, mainColour)
+      this.saveConvertedColours(...hsv, originalColours, mainColour)
       convertedColours = this.convertedColours
     }
     let dataInHSV = ColourChanger.RGBToHSV(dataInRGB)
