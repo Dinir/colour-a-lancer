@@ -17,6 +17,11 @@
   <meta property="og:description" content="Recolour the player sprite of Jet Lancer with your choice.">
   <link rel="canonical"      href="https://dinir.github.io/colour-a-lancer/">
   <meta property="og:url" content="https://dinir.github.io/colour-a-lancer/">
+  <meta property="og:image" content="https://dinir.github.io/colour-a-lancer/image/open-graph-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width"  content="978">
+  <meta property="og:image:height" content="500">
+  <meta property="og:image:alt" content="Three colour sliders for hue, saturation, value are in the left side. Right side has a preview of a zoomed sprite of a jet, and a preview of all sprite strip below it.">
   <meta property="og:type" content="website">
   
   <meta name="viewport" content="width=552">
@@ -97,7 +102,8 @@
     'e9345c', 'b6334c', '7b3238', '922532', // top-side, bottom-side: wing and front
     'ff90a9', '7b1c33', // end of wing, bottom-side front
     '852a39', '5c2126', '5d2126', // bottom-side: center and darker wing
-    'b6334d', 'b7334c' // WHY IS CANVAS CHANGING 1 BIT OF RGB VALUE ON SOME PIXELS WHEN DRAWING IT STRAIGHT FROM THE STORED IMAGE FILE
+    // WHY IS CANVAS CHANGING RANDOM AMOUNT OF BIT OF RGB VALUE ON SOME PIXELS WHEN DRAWING IT STRAIGHT FROM THE STORED IMAGE FILE
+    'b6334d', 'b7334c', 'ee345a', 'b4304a', '832839', '7b3039', '942431', '5c2026'
   ]
   const spriteIndex = {
     topView: 4,
